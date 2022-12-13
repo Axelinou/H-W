@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hangman</title>
+    <link href="../css1/style.css" rel="stylesheet"/>
+</head>
+<body>
+    <div class="parent">
+        <div id=baniere_gauche>
+            <div class="positionnement">
+          <h1>A vous de jouer</h1>
+          <form method="post">
+            <p>{{.Text}}</p>
+            <p><pre>{{.Display}}</pre></p>
+            <label class="title1">Rentrer un mot ou une lettre :</label><br>
+            <input type="text" name="w">
+            <input type="submit">
+          </form>
+          <a href="../resources/Index.html">Retour à l'accueil</a>
+        </div>
+        </div>
+    
+        <div id=baniere_droite>
+          <p><pre>{{.Hangman}}</pre></p>
+        </div>
+    </div>
+</body>
+</html>
