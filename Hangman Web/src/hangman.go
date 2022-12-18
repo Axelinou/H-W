@@ -12,7 +12,7 @@ import (
 	"time"
 )
 
-// const quote = string(byte(34))
+// tableau qui contient toute les lettres d'ascii art
 
 var a []string = []string{
 	" #####",
@@ -242,8 +242,7 @@ var underscore []string = []string{
 
 var letters [][]string = [][]string{a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z, space, underscore} // Initialisation de l'alphabet
 
-func PrintAscii(text string) string { // fonction permettant d'imprimer en art ASCII Art du texte en majuscule simple, un espace et un underscore
-	text = strings.ToUpper(text)
+func PrintAscii(text string) string { // affichage du ascii
 	upperText := []byte{}
 	for i := 0; i < len(text); i++ {
 		if text[i] > 96 && text[i] < 123 {
@@ -271,8 +270,8 @@ func PrintAscii(text string) string { // fonction permettant d'imprimer en art A
 	return result
 }
 
-func PrintHangman(fails int) string { // permet d'afficher l'état du pendu
-	data, err := ioutil.ReadFile("../text/hangman.txt")
+func PrintHangman(fails int) string { // permet d'afficher l'état du pendu en prenant en compte le nombre d'erreurs du joueur
+	data, err := ioutil.ReadFile("../text/hangman.txt") // lecture du fichier hangman comme dans le projet précèdant
 	if err != nil {
 		os.Exit(0)
 	}
@@ -288,7 +287,7 @@ func PrintHangman(fails int) string { // permet d'afficher l'état du pendu
 	return result
 }
 
-func HideLetters(word, knownLetters string) string { //affiche le mot à deviner et ses indices (le mot change en fonction bonnes réponses du joueur)
+func HideLetters(word, knownLetters string) string { //indices variables selon les réponses du joueurs
 	final := ""
 	for i := 0; i < len(word); i++ {
 		if strings.Contains(knownLetters, string(word[i])) {
@@ -311,20 +310,24 @@ type Hangman struct {
 	difficulty       string
 }
 
-var indextmpl = template.Must(template.ParseFiles("resources/index1.html"))
-var tmpl = template.Must(template.ParseFiles("resources/index.html"))
+var defeattmpl = template.Must(template.ParseFiles("resources/defeat.html"))   //template de la page defeat
+var victorytmpl = template.Must(template.ParseFiles("resources/victory.html")) //template de la page victory
+
+var indextmpl = template.Must(template.ParseFiles("resources/index1.html")) // template de la page d'acceuil
+var tmpl = template.Must(template.ParseFiles("resources/index.html"))       // template du hangman
+
 var stringData string = ""            // les données du fichier selectionné
 var wordsList []string = []string{""} // les données du fichier selectionné
-var word string = ""                  // mot choisi
+var word string = ""                  // mot choisi aléatoirement
 var attemptedLetters string = ""      // lettres déja essayés
 var wrongGuesses = 0                  // le nombre d'erreurs du joueur
 var done bool = false                 // détermine si la partie est terminée
 
-func HttpHandler(w http.ResponseWriter, r *http.Request) {
+func HttpHandler(w http.ResponseWriter, r *http.Request) { // fonction principale du hangman
 
-	difficulty := r.FormValue("difficulty")
+	difficulty := r.FormValue("difficulty") // recupère la valeur des boutons difficulté
 	if difficulty != "" {
-		SetDifficulty(difficulty)
+		SetDifficulty(difficulty) // lecture du fichier text de meme nom
 
 	}
 
@@ -342,14 +345,14 @@ func HttpHandler(w http.ResponseWriter, r *http.Request) {
 		wrongGuesses = 0
 		done = false
 	}
-	guess := r.FormValue("w")
+	guess := r.FormValue("w") // valeur entrée par l'utilisateur dans le formulaire
 
 	currentText := ""
 	if len(guess) > 1 {
-		if word == guess {
+		if word == guess { //si le mot correspond à au mot entré par l'utilisateur
 			done = true
 			attemptedLetters = guess
-		} else {
+		} else { // si c'est pas le cas on ajoute 2 à ses erreurs
 			wrongGuesses += 2
 			if wrongGuesses >= 11 {
 				wrongGuesses = 10
@@ -369,7 +372,7 @@ func HttpHandler(w http.ResponseWriter, r *http.Request) {
 			attemptedLetters += guess
 		}
 	} else {
-		currentText = fmt.Sprintf("%s n'est pas dans le mot... \n\n", r.FormValue("difficulty"))
+		currentText = fmt.Sprintf(" Il vous reste %d tentatives bonne chance ! \n\n", (10 - wrongGuesses)) //message par défaut
 	}
 	time.Sleep(2 * time.Second)
 
@@ -377,13 +380,15 @@ func HttpHandler(w http.ResponseWriter, r *http.Request) {
 	if HideLetters(word, attemptedLetters) == HideLetters(word, "abcdefghijklmnopqrstuvwxyz") {
 		currentText = "Vous avez Gagné!" + fmt.Sprintf("Le Mot Etait %s\n", word)
 		done = true
+		http.Redirect(w, r, "/victory", http.StatusSeeOther) //redirection vers la page de victoire
+
 	} else if wrongGuesses >= 10 {
 		currentText = "Vous avez Perdu..." + fmt.Sprintf("Le Mot Etait %s\n", word)
 		done = true
+		http.Redirect(w, r, "/defeat", http.StatusSeeOther) //redirection vers la page de défaite
 	}
-	fmt.Println("is there someone else ?")
 
-	data := Hangman{
+	data := Hangman{ //valeur de la template
 		guess:            "",
 		word:             word,
 		wrongGuesses:     wrongGuesses,
@@ -398,15 +403,14 @@ func HttpHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func HttpHandlerindex(w http.ResponseWriter, r *http.Request) {
+func HttpHandlerindex(w http.ResponseWriter, r *http.Request) { // fonction principale de la page d'acceuil
 	currentText := ""
 
 	difficulty := r.FormValue("difficulty")
 	if difficulty != "" {
 		SetDifficulty(difficulty)
-		currentText = fmt.Sprintf(" la difficulté %s est séléctionnée  \n\n", difficulty)
 
-		http.Redirect(w, r, "/hangman", http.StatusSeeOther)
+		http.Redirect(w, r, "/hangman", http.StatusSeeOther) // redirection vers la page du hangman
 
 	} else {
 		currentText = "Bienvenue choisissez une difficulté"
@@ -426,7 +430,33 @@ func HttpHandlerindex(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func SetDifficulty(difficulty string) {
+func DefeatHttpHandler(w http.ResponseWriter, r *http.Request) {
+
+	data := Hangman{
+		guess:            "",
+		word:             word,
+		wrongGuesses:     wrongGuesses,
+		attemptedLetters: attemptedLetters,
+		Display:          PrintAscii(HideLetters(word, attemptedLetters)),
+		Hangman:          PrintHangman(wrongGuesses),
+	}
+
+	defeattmpl.Execute(w, data)
+}
+func VictoryHttpHandler(w http.ResponseWriter, r *http.Request) {
+
+	data := Hangman{
+		guess:            "",
+		word:             word,
+		wrongGuesses:     wrongGuesses,
+		attemptedLetters: attemptedLetters,
+		Display:          PrintAscii(HideLetters(word, attemptedLetters)),
+		Hangman:          PrintHangman(wrongGuesses),
+	}
+
+	victorytmpl.Execute(w, data)
+}
+func SetDifficulty(difficulty string) { //fonction permettant  de selectionner le fichier avec la difficulté choisie
 	data, err := ioutil.ReadFile(fmt.Sprintf("../text/%s.txt", difficulty))
 	if err != nil {
 		fmt.Println("Erreur : fichier introuvable")
@@ -456,10 +486,12 @@ func main() {
 
 	tmpl = template.Must(template.ParseFiles("resources/index.html"))
 
-	styleServer := http.FileServer(http.Dir("css1"))
+	styleServer := http.FileServer(http.Dir("css1")) //permet d'indiquer au serveur ou trouver le css et les images
 	http.Handle("/css1/", http.StripPrefix("/css1/", styleServer))
-	fmt.Println(http.FileServer(http.Dir("css")))
-	http.HandleFunc("/", HttpHandlerindex)
-	http.HandleFunc("/hangman", HttpHandler)
-	http.ListenAndServe(":80", nil)
+
+	http.HandleFunc("/", HttpHandlerindex)          //adresse url de la page d'acceuil
+	http.HandleFunc("/hangman", HttpHandler)        //adresse url du hangman
+	http.HandleFunc("/defeat", DefeatHttpHandler)   //adresse url de la page de defaite
+	http.HandleFunc("/victory", VictoryHttpHandler) //adresse url de la page de victoire
+	http.ListenAndServe(":80", nil)                 //utilisation du port 80
 }
