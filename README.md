@@ -5,7 +5,7 @@ Attribution de rôles:
 
 Auzet Sarah s’est occupée du Html/Css
 
-Et Pham Alexandre et Barbesier Axel sec sont occupés du back en go
+Et Pham Alexandre et Barbesier Axel se sont occupés du back en go
 
 # Pour lancer le programme 
 
