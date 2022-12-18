@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link href="../css1/style.css" rel="stylesheet"/>
+  </head>
+  <body>
+    <h1>Tente ta chance</h1>
+    <form method="post">
+      <label>word:</label><br />
+      <input type="text" name="w" value=""><br />
+      <input type="submit">
+     
+    </form>
+    <form method="post" class="button-container">
+      <label>difficulté :</label><br />
+      <div class="difficulty-buttons">
+        <input type="submit" name="difficulty" value="easy">
+        <input type="submit" name="difficulty" value="normal">
+        <input type="submit" name="difficulty" value="hard">
+      </div>
+    </form>
+    <p>{{.Text}}</p>
+    <p><pre>{{.Display}}</pre></p>
+    <p><pre>{{.Hangman}}</pre></p>
+  </body>
+</html>
