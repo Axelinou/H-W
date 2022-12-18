@@ -1,1 +1,1 @@
-# H-W
+# Hangman Web Go
