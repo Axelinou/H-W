@@ -456,7 +456,7 @@ func VictoryHttpHandler(w http.ResponseWriter, r *http.Request) {
 
 	victorytmpl.Execute(w, data)
 }
-func SetDifficulty(difficulty string) { //fonction permettant  de selectionner le fichier avec la difficulté choisie
+func SetDifficulty(difficulty string) {
 	data, err := ioutil.ReadFile(fmt.Sprintf("../text/%s.txt", difficulty))
 	if err != nil {
 		fmt.Println("Erreur : fichier introuvable")
@@ -486,12 +486,13 @@ func main() {
 
 	tmpl = template.Must(template.ParseFiles("resources/index.html"))
 
-	styleServer := http.FileServer(http.Dir("css1")) //permet d'indiquer au serveur ou trouver le css et les images
+	styleServer := http.FileServer(http.Dir("css1"))
 	http.Handle("/css1/", http.StripPrefix("/css1/", styleServer))
+	fmt.Println(http.FileServer(http.Dir("css")))
 
-	http.HandleFunc("/", HttpHandlerindex)          //adresse url de la page d'acceuil
-	http.HandleFunc("/hangman", HttpHandler)        //adresse url du hangman
-	http.HandleFunc("/defeat", DefeatHttpHandler)   //adresse url de la page de defaite
-	http.HandleFunc("/victory", VictoryHttpHandler) //adresse url de la page de victoire
-	http.ListenAndServe(":80", nil)                 //utilisation du port 80
+	http.HandleFunc("/", HttpHandlerindex)
+	http.HandleFunc("/hangman", HttpHandler)
+	http.HandleFunc("/defeat", DefeatHttpHandler)
+	http.HandleFunc("/victory", VictoryHttpHandler)
+	http.ListenAndServe(":80", nil)
 }
