@@ -2,7 +2,6 @@ Body {
     margin: 0;
     padding : 0;
     text-align: center;
-    background: linear-gradient(to right,cornflowerblue, white)
 }
 
 .parent {
@@ -21,6 +20,8 @@ Body {
     background-color: white;
     width:50%;
     height:100vh;
+    position : relative;
+    box-sizing: border-box;
 }
 
 .title1 {
@@ -81,11 +82,6 @@ a {
     height:100vh;
 }
 
-.positionnement {
-    position : relative; 
-    top: 0px;
-}
-
 .image1 {
     position: relative;
     left: -750px;
@@ -94,4 +90,93 @@ a {
 .image2 {
    position : relative;
     left: 750px;
+}
+
+.line{
+    background-color: black;
+    position: absolute;
+}
+
+.droite {
+    width: 5px;
+    height: calc(100% - 100px);
+    bottom: 50px;
+    right : 50px;
+}
+.bas {
+    height: 5px;
+    width: calc(100% - 100px);
+    bottom: 50px;
+    left : 50px;
+}
+
+.haut {
+    width: calc(60% - 100px);
+    height: 5px;
+    top: 50px;
+    right : 50px;
+}
+
+.corde {
+    width: 5px;
+    height: calc(26% - 100px);
+    top: 50px;
+    left : calc(50% + 50px);
+}
+
+.tête {
+    width: 100px;
+    height: 100px;
+    top: 20%;
+    left: 50.5%;
+    border-radius: 50%;
+    background-color:transparent;
+    border: 5px solid black;
+    z-index : 1;
+}
+
+.corp {
+    width: 5px;
+    height: calc(44% - 100px);
+    top: 295px;
+    left : calc(50% + 50px);
+}
+
+.brasgauche {
+    width: 5px;
+    height: 20%;
+    top: 300px;
+    left : calc(45% + 50px);
+    transform: rotate(30deg);
+}
+
+.brasdroit {
+    width: 5px;
+    height: 20%;
+    top: 300px;
+    left : calc(55% + 50px);
+    transform: rotate(-30deg);
+}
+
+.jambegauche {
+    width: 5px;
+    height: 20%;
+    top: 585px;
+    left : calc(45% + 50px);
+    transform: rotate(30deg);
+}
+
+.jambedroite {
+    width: 5px;
+    height: 20%;
+    top: 585px;
+    left : calc(55% + 50px);
+    transform: rotate(-30deg);
+}
+.Victoire {
+    color:forestgreen;
+}
+
+.José {
+    color:forestgreen;
 }
