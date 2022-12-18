@@ -119,7 +119,7 @@ a {
 
 .corde {
     width: 5px;
-    height: calc(30% - 100px);
+    height: calc(26% - 100px);
     top: 50px;
     left : calc(50% + 50px);
 }
@@ -130,15 +130,15 @@ a {
     top: 20%;
     left: 50.5%;
     border-radius: 50%;
-    background-color: white;
+    background-color:transparent;
     border: 5px solid black;
     z-index : 1;
 }
 
 .corp {
     width: 5px;
-    height: calc(70% - 100px);
-    top: 50px;
+    height: calc(44% - 100px);
+    top: 295px;
     left : calc(50% + 50px);
 }
 
@@ -146,7 +146,7 @@ a {
     width: 5px;
     height: 20%;
     top: 300px;
-    left : 485px;
+    left : calc(45% + 50px);
     transform: rotate(30deg);
 }
 
@@ -154,7 +154,7 @@ a {
     width: 5px;
     height: 20%;
     top: 300px;
-    left : 575px;
+    left : calc(55% + 50px);
     transform: rotate(-30deg);
 }
 
@@ -162,7 +162,7 @@ a {
     width: 5px;
     height: 20%;
     top: 585px;
-    left : 485px;
+    left : calc(45% + 50px);
     transform: rotate(30deg);
 }
 
@@ -170,6 +170,6 @@ a {
     width: 5px;
     height: 20%;
     top: 585px;
-    left : 575px;
+    left : calc(55% + 50px);
     transform: rotate(-30deg);
 }
