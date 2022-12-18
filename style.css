@@ -173,3 +173,10 @@ a {
     left : calc(55% + 50px);
     transform: rotate(-30deg);
 }
+.Victoire {
+    color:forestgreen;
+}
+
+.José {
+    color:forestgreen;
+}
